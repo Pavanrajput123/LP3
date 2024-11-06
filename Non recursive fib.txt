@@ -1,0 +1,19 @@
+def fibonacci_iterative(n):
+    n1, n2 = 0, 1
+    steps = 0  # Initialize step count
+    result = []
+
+    for i in range(n):
+        steps += 1  # Increment step count for each iteration
+        result.append(n1)
+        n1, n2 = n2, n1 + n2
+
+    return result, steps
+
+# Main code to test iterative Fibonacci
+n = 10  # Set number of elements for Jupyter compatibility
+series, steps = fibonacci_iterative(n)
+
+print("Iterative Fibonacci Series:")
+print(" ".join(map(str, series)))
+print(f"Total Steps (Iterative): {steps}")

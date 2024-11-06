@@ -1,0 +1,56 @@
+import pandas as pd  # For data manipulation
+import numpy as np  # For numerical operations
+import matplotlib.pyplot as plt  # For plotting
+from sklearn.cluster import KMeans  # K-Means clustering
+from sklearn.preprocessing import StandardScaler  # For feature scaling
+
+# 1. Load the dataset
+df = pd.read_csv('sales_data_sample.csv')  # Replace with your dataset file
+
+# 2. Understand the dataset
+print(df.head())  # Display the first few rows
+print(df.info())  # Show information about the dataset
+
+# 3. Preprocess the data
+# Select relevant features for clustering (replace with appropriate feature names)
+X = df[['Feature1', 'Feature2']].dropna()  # Drop rows with missing values directly in selection
+
+# 4. Scale the features
+scaler = StandardScaler()  # Initialize scaler
+X_scaled = scaler.fit_transform(X)  # Scale the features
+
+# 5. Determine the number of clusters using the elbow method
+wcss = []  # To store within-cluster sum of squares
+for i in range(1, 11):
+    kmeans = KMeans(n_clusters=i, random_state=42)  # Initialize KMeans
+    kmeans.fit(X_scaled)  # Fit the model
+    wcss.append(kmeans.inertia_)  # Append WCSS
+
+# 6. Plot the elbow method
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, 11), wcss, marker='o')  # Plot WCSS
+plt.title('Elbow Method')
+plt.xlabel('Number of clusters')
+plt.ylabel('WCSS')
+plt.xticks(range(1, 11))
+plt.grid()
+plt.show()  # Show the plot
+
+# 7. Fit the K-Means model with the optimal number of clusters (choose based on the elbow plot)
+optimal_clusters = 3  # Replace with optimal number from elbow method
+kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+y_kmeans = kmeans.fit_predict(X_scaled)  # Fit and predict clusters
+
+# 8. Add cluster labels to the original dataset
+df['Cluster'] = y_kmeans  # Add cluster labels to the dataframe
+
+# 9. Visualize the clusters
+plt.figure(figsize=(10, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=y_kmeans, cmap='viridis')  # Scatter plot
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=300, c='red', label='Centroids')  # Plot centroids
+plt.title('K-Means Clustering')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.legend()
+plt.grid()
+plt.show()  # Show the plot

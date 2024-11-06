@@ -1,0 +1,46 @@
+import pandas as pd  # For data manipulation
+import numpy as np  # For numerical operations
+from sklearn.model_selection import train_test_split  # For splitting the dataset
+from sklearn.feature_extraction.text import TfidfVectorizer  # For text feature extraction
+from sklearn.neighbors import KNeighborsClassifier  # KNN classifier
+from sklearn.svm import SVC  # Support Vector Classifier
+from sklearn.metrics import classification_report, accuracy_score  # For model evaluation
+
+# 1. Load the dataset
+df = pd.read_csv('spam_emails.csv')  # Replace with your dataset file
+
+# 2. Understand the dataset
+print(df.head())  # Display the first few rows
+print(df['label'].value_counts())  # Show distribution of spam vs. not spam
+
+# 3. Cleanup (if required)
+# Drop rows with missing values
+df.dropna(inplace=True)
+
+# 4. Convert text data to features
+vectorizer = TfidfVectorizer()  # Initialize TF-IDF vectorizer
+X = vectorizer.fit_transform(df['email'])  # Transform emails to feature vectors
+y = df['label']  # Target variable (spam or not spam)
+
+# 5. Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+# 6. Train K-Nearest Neighbors model
+knn = KNeighborsClassifier(n_neighbors=5)  # Initialize KNN model
+knn.fit(X_train, y_train)  # Fit the model to the training data
+knn_predictions = knn.predict(X_test)  # Make predictions on the test data
+
+# 7. Train Support Vector Machine model
+svm = SVC(kernel='linear')  # Initialize SVM model with linear kernel
+svm.fit(X_train, y_train)  # Fit the model to the training data
+svm_predictions = svm.predict(X_test)  # Make predictions on the test data
+
+# 8. Evaluate KNN model
+print("KNN Model Evaluation:")
+print("Accuracy:", accuracy_score(y_test, knn_predictions))  # Calculate accuracy
+print(classification_report(y_test, knn_predictions))  # Display classification report
+
+# 9. Evaluate SVM model
+print("SVM Model Evaluation:")
+print("Accuracy:", accuracy_score(y_test, svm_predictions))  # Calculate accuracy
+print(classification_report(y_test, svm_predictions))  # Display classification report

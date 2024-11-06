@@ -1,0 +1,36 @@
+def fibonacci_recursive(n, steps=None):
+    if steps is None:  # Initialize steps if not provided
+        steps = [0]
+    if n <= 1:
+        steps[0] += 1
+        return n
+    steps[0] += 1
+    return fibonacci_recursive(n - 1, steps) + fibonacci_recursive(n - 2, steps)
+
+def fibonacci_iterative(n):
+    n1, n2 = 0, 1
+    steps = 0
+    result = []
+
+    for i in range(n):
+        steps += 1
+        result.append(n1)
+        n1, n2 = n2, n1 + n2
+
+    return result, steps
+
+# Main code to compare both methods
+n = 10  # Set number of elements for Jupyter compatibility
+
+# Recursive approach
+steps_recursive = [0]
+print("Recursive Fibonacci Series:")
+for i in range(n):
+    print(fibonacci_recursive(i, steps_recursive), end=" ")
+print(f"\nTotal Steps (Recursive): {steps_recursive[0]}")
+
+# Iterative approach
+series, steps_iterative = fibonacci_iterative(n)
+print("\nIterative Fibonacci Series:")
+print(" ".join(map(str, series)))
+print(f"Total Steps (Iterative): {steps_iterative}")

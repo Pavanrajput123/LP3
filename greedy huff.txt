@@ -1,0 +1,72 @@
+import heapq  # For priority queue implementation using heap
+
+# Class representing a Huffman Tree node
+class HuffmanNode:
+    def __init__(self, char, freq):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+
+    # Define comparison operators for the priority queue
+    def __lt__(self, other):
+        return self.freq < other.freq
+
+# Function to generate Huffman codes
+def generate_codes(node, current_code, codes):
+    if not node:
+        return
+
+    # If it's a leaf node, add the character and its code to the dictionary
+    if node.char is not None:
+        codes[node.char] = current_code
+
+    # Traverse the left and right children
+    generate_codes(node.left, current_code + "0", codes)
+    generate_codes(node.right, current_code + "1", codes)
+
+# Function to perform Huffman Encoding
+def huffman_encoding(char_freq):
+    # Create a priority queue (min-heap) from the character frequencies
+    heap = [HuffmanNode(char, freq) for char, freq in char_freq.items()]
+    heapq.heapify(heap)
+
+    # Build the Huffman Tree using a greedy strategy
+    while len(heap) > 1:
+        # Remove the two nodes with the smallest frequencies
+        left = heapq.heappop(heap)
+        right = heapq.heappop(heap)
+
+        # Create a new internal node with their combined frequency
+        merged = HuffmanNode(None, left.freq + right.freq)
+        merged.left = left
+        merged.right = right
+
+        # Add the new node back to the heap
+        heapq.heappush(heap, merged)
+
+    # The root of the Huffman Tree is the only node left in the heap
+    root = heap[0]
+
+    # Generate the Huffman codes from the tree
+    codes = {}
+    generate_codes(root, "", codes)
+
+    return codes
+
+# Main code to test Huffman Encoding
+char_freq = {
+    'a': 5,
+    'b': 9,
+    'c': 12,
+    'd': 13,
+    'e': 16,
+    'f': 45
+}
+
+print("Character Frequencies:", char_freq)
+codes = huffman_encoding(char_freq)
+
+print("Huffman Codes:")
+for char, code in codes.items():
+    print(f"{char}: {code}")

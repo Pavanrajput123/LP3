@@ -1,0 +1,46 @@
+import numpy as np  # For numerical operations
+import matplotlib.pyplot as plt  # For plotting
+
+# 1. Define the function to minimize (f(x) = x^2)
+def f(x):
+    return x**2  # Quadratic function
+
+# 2. Define the gradient of the function (derivative)
+def gradient(x):
+    return 2 * x  # Derivative of f(x) = x^2
+
+# 3. Implement Gradient Descent
+def gradient_descent(starting_point, learning_rate, num_iterations):
+    x = starting_point  # Starting point
+    x_history = [x]  # Store history of x values for plotting
+
+    for _ in range(num_iterations):
+        x = x - learning_rate * gradient(x)  # Update rule
+        x_history.append(x)  # Append new x value to history
+
+    return x, x_history  # Return final x value and history
+
+# 4. Parameters for Gradient Descent
+starting_point = 10  # Starting point
+learning_rate = 0.1  # Step size
+num_iterations = 20  # Number of iterations
+
+# 5. Run Gradient Descent
+final_x, x_history = gradient_descent(starting_point, learning_rate, num_iterations)
+
+# 6. Print the results
+print(f"Final x value: {final_x:.4f}")  # Print final x value
+print(f"Minimum value of f(x): {f(final_x):.4f}")  # Print minimum value of the function
+
+# 7. Plotting the function and the descent path
+x_values = np.linspace(-10, 10, 400)  # Create x values for plotting
+plt.plot(x_values, f(x_values), label='f(x) = x^2')  # Plot the function
+plt.scatter(x_history, f(np.array(x_history)), color='red', label='Descent Path')  # Plot descent path
+plt.title("Gradient Descent on f(x) = x^2")
+plt.xlabel("x")
+plt.ylabel("f(x)")
+plt.axhline(0, color='black', linewidth=0.5, ls='--')  # Add x-axis
+plt.axvline(0, color='black', linewidth=0.5, ls='--')  # Add y-axis
+plt.legend()
+plt.grid()
+plt.show()  # Show the plot

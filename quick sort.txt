@@ -1,0 +1,57 @@
+import random
+
+# Function to calculate binomial coefficient C(n, k)
+def binomial_coefficient(n, k):
+    # If k is greater than n, the result is 0
+    if k > n:
+        return 0
+    # If k is 0 or equal to n, the result is 1 (base cases)
+    if k == 0 or k == n:
+        return 1
+    # Recursive formula: C(n, k) = C(n-1, k-1) + C(n-1, k)
+    return binomial_coefficient(n - 1, k - 1) + binomial_coefficient(n - 1, k)
+
+# Deterministic Quick Sort implementation
+def quick_sort_deterministic(arr):
+    # Base case: if the array has 1 or 0 elements, it's already sorted
+    if len(arr) <= 1:
+        return arr
+    # Choose the first element as the pivot
+    pivot = arr[0]  
+    # Partition the array into left and right sub-arrays
+    left = [x for x in arr[1:] if x < pivot]
+    right = [x for x in arr[1:] if x >= pivot]
+    # Recursively sort the left and right sub-arrays and combine them with the pivot
+    return quick_sort_deterministic(left) + [pivot] + quick_sort_deterministic(right)
+
+# Randomized Quick Sort implementation
+def quick_sort_randomized(arr):
+    # Base case: if the array has 1 or 0 elements, it's already sorted
+    if len(arr) <= 1:
+        return arr
+    # Randomly select a pivot index from the array
+    pivot_index = random.randint(0, len(arr) - 1)
+    pivot = arr[pivot_index]
+    # Move the pivot to the end of the array for partitioning
+    arr[pivot_index], arr[-1] = arr[-1], arr[pivot_index]
+    # Partition the array into left and right sub-arrays
+    left = [x for x in arr[:-1] if x < pivot]
+    right = [x for x in arr[:-1] if x >= pivot]
+    # Recursively sort the left and right sub-arrays and combine them with the pivot
+    return quick_sort_randomized(left) + [pivot] + quick_sort_randomized(right)
+
+# Example usage for Jupyter compatibility
+n, k = 5, 2  # Values for binomial coefficient calculation
+print(f"Binomial Coefficient C({n}, {k}) =", binomial_coefficient(n, k))
+
+# Example array to demonstrate sorting
+array = [3, 6, 8, 10, 1, 2, 1]
+print("Original array:", array)
+
+# Sorting using Deterministic Quick Sort
+sorted_array_deterministic = quick_sort_deterministic(array)
+print("Sorted array (Deterministic Quick Sort):", sorted_array_deterministic)
+
+# Sorting using Randomized Quick Sort
+sorted_array_randomized = quick_sort_randomized(array)
+print("Sorted array (Randomized Quick Sort):", sorted_array_randomized)

@@ -1,0 +1,38 @@
+pragma solidity ^0.8.0;
+
+contract StudentData {
+
+    struct Student {
+        uint id;
+        string name;
+        uint age;
+    }
+
+    Student[] public students;
+    uint public studentCount;
+
+    constructor() {
+        studentCount = 0;
+    }
+
+    // Add a new student
+    function addStudent(string memory _name, uint _age) public {
+        students.push(Student(studentCount, _name, _age));
+        studentCount++;
+    }
+
+    // Retrieve student details by ID
+    function getStudent(uint _id) public view returns (uint, string memory, uint) {
+        require(_id < studentCount, "Student ID does not exist");
+        Student memory student = students[_id];
+        return (student.id, student.name, student.age);
+    }
+
+    // Fallback function to handle ether sent to the contract
+    fallback() external payable {}
+
+    // Function to check contract balance (in case fallback function is used)
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+}

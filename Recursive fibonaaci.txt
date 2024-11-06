@@ -1,0 +1,18 @@
+def fibonacci_recursive(n, steps=None):
+    if steps is None:  # Initialize steps if not provided
+        steps = [0]
+    if n <= 1:
+        steps[0] += 1  # Increment step count for each function call
+        return n
+    steps[0] += 1  # Increment step count
+    return fibonacci_recursive(n - 1, steps) + fibonacci_recursive(n - 2, steps)
+
+# Main code to test recursive Fibonacci
+n = 10  # Set the number of elements directly for Jupyter compatibility
+steps = [0]  # Use a list to store the step count (mutable in recursive calls)
+
+print("Recursive Fibonacci Series:")
+for i in range(n):
+    print(fibonacci_recursive(i, steps), end=" ")
+
+print(f"\nTotal Steps (Recursive): {steps[0]}")
